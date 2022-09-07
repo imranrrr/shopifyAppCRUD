@@ -1,25 +1,17 @@
-import {
-  Button,
-  Modal,
-  Form,
-  FormLayout,
-  Checkbox,
-  TextField,
-} from "@shopify/polaris";
+import { Button, Modal, Form, FormLayout, TextField } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 
-export default function AddProductModal() {
+export default function AddProductModal({ isLoading, handleSubmit }) {
   const [active, setActive] = useState(true);
   const [product, setProduct] = useState({ title: "", price: 0 });
+  const handleChange = useCallback(() => setActive(!active), [active]);
 
   const activator = <Button onClick={handleChange}>Add Product</Button>;
 
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
+  const handleChangeField = useCallback((value, name) => {
     setProduct({ ...product, [name]: value });
-  });
+  }, []);
 
-  const handleSubmit = () => {};
   return (
     <div>
       <Modal
@@ -39,21 +31,25 @@ export default function AddProductModal() {
         ]}
       >
         <Modal.Section>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={() => handleSubmit(product)}>
             <FormLayout>
               <TextField
-                onChange={handleEmailChange}
+                onChange={(e) => handleChangeField(e, "title")}
                 label="Title"
                 type="text"
                 name="title"
+                value={product.title}
               />
               <TextField
-                onChange={handleChange}
+                onChange={(e) => handleChangeField(e, "price")}
                 label="Price"
                 type="number"
                 name="price"
+                value={product.price}
               />
-              <Button submit>Submit</Button>
+              <Button loading={isLoading} submit>
+                Submit
+              </Button>
             </FormLayout>
           </Form>
         </Modal.Section>

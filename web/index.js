@@ -122,9 +122,9 @@ export async function createServer(
     );
     let status = 200;
     let error = null;
-
+    console.log("backend test" + req.body);
     try {
-      await productCreator(session);
+      await productCreator(session, req);
     } catch (e) {
       console.log(`Failed to process products/create: ${e.message}`);
       status = 500;

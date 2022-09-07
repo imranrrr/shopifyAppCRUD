@@ -34,13 +34,13 @@ export function ProductsCard() {
     <Toast {...toastProps} onDismiss={() => setToastProps(emptyToastProps)} />
   );
 
-  const handlePopulate = async () => {
-    setIsLoading(true);
+  const handleSubmit = async (product) => {
+    // setIsLoading(true);
     const response = await fetch("/api/products/create");
 
     if (response.ok) {
       await refetchProductCount();
-      setToastProps({ content: "5 products created!" });
+      setToastProps({ content: `${data.countData} products in store` });
     } else {
       setIsLoading(false);
       setToastProps({
@@ -56,7 +56,16 @@ export function ProductsCard() {
       <Card
         title="Product Counter"
         sectioned
-        actions={[{ content: <AddProductModal /> }]}
+        actions={[
+          {
+            content: (
+              <AddProductModal
+                isLoading={isLoading}
+                handleSubmit={handleSubmit}
+              />
+            ),
+          },
+        ]}
       >
         <TextContainer spacing="loose">
           <p>
